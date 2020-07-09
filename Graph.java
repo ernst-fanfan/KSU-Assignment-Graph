@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
-public class Reachability {
+public class Graph {
     public static void main(String[] args) {
         int maxNode = 5;
         int [] nodeNum = {0};
         int [] [] temp = new int[maxNode][maxNode];
         boolean exit = false;
-        while(exit != true) {
+        while(!exit) {
             exit = menu(maxNode, temp, nodeNum);
         }
     }
@@ -23,40 +23,31 @@ public class Reachability {
 
         boolean exit = false;
         switch (m_input) {
-            case 0:{
-                exit = true;
-                break;
-            }
-            case 1:{
-                nodeNum[0] = enter_data(maxNode, temp);
-                break;
-            }
-            case 2:{
+            case 0 -> exit = true;
+            case 1 -> nodeNum[0] = enter_data(maxNode, temp);
+            case 2 -> {
                 int node = nodeNum[0];
                 a1 = new int[node][node];
                 copy_matrix(temp, a1);
-                if(!is_matrix_empty(a1)) {
+                if (!is_matrix_empty(a1)) {
                     print_output(node, a1);
-                }else{
+                } else {
                     System.out.println("\nPlease load matrix!");
                 }
-                break;
             }
-            default:{
-                System.out.println("Input out of range. Please select from menu.");
-                break;
-            }
+            default -> System.out.println("Input out of range. Please select from menu.");
         }
         return exit;
     }
 
     private static boolean is_matrix_empty(int[][] arr) {
         boolean trig = true;
-        for (int i = 0; i < arr.length; i++){
-            for(int j = 0; j < arr[i].length; j++){
-                if(arr[i][j] > 0);
-                trig = false;
-                continue;
+        for (int[] i : arr) {
+            for (int j : i) {
+                if (j > 0) {
+                    trig = false;
+                    break;
+                }
             }
         }
         return trig;
@@ -113,10 +104,10 @@ public class Reachability {
             matrix = multiply_matrix(a1, matrix, a1.length);
         }
 
-        for(int i = 0; i < matrix.length; i++){
-            for(int j = 0; j < matrix[0].length; j++){
-                if(matrix[i][j] > 0){
-                    count += matrix[i][j];
+        for (int[] ints : matrix) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (ints[j] > 0) {
+                    count += ints[j];
                 }
             }
         }
@@ -151,8 +142,8 @@ public class Reachability {
 
     private static void in_degrees(int i, int[][] a1) {
         int inDegree = 0;
-        for(int j = 0; j < a1.length; j++){
-            inDegree += a1[j][i-1];
+        for (int[] ints : a1) {
+            inDegree += ints[i - 1];
         }
         System.out.println("Node " + i + " in-degree is " + inDegree);
     }
@@ -161,16 +152,14 @@ public class Reachability {
     private static int[][] build_rm_n(int[][] xm, int[][] rm, int[][] a1, int nodeNum) {
         for (int i = 0; i < nodeNum -1; i++){
             xm = multiply_matrix(a1, xm, nodeNum);
-            rm = add_matrix(rm,xm);
+            add_matrix(rm, xm);
         }
         return xm;
     }
 
     private static void copy_matrix(int[][] a1, int[][] xm) {
         for (int i = 0; i < xm.length; i++){
-            for(int j = 0; j < xm[i].length; j++){
-                xm[i][j] = a1[i][j];
-            }
+            System.arraycopy(a1[i], 0, xm[i], 0, xm[i].length);
         }
     }
 
@@ -189,9 +178,9 @@ public class Reachability {
     }
 
     private static void print_matrix(int[][] arr) {
-        for (int i = 0; i < arr.length; i++){
-            for(int j = 0; j < arr[i].length; j++){
-                System.out.print(arr[i][j] + " ");
+        for (int[] ints : arr) {
+            for (int anInt : ints) {
+                System.out.print(anInt + " ");
             }
             System.out.println();
         }
@@ -224,7 +213,7 @@ public class Reachability {
     private static int collect_node_num(int maxNodes){
         int nodeNum = 0;
         boolean validInput = false;
-        while(validInput != true) {
+        while(!validInput) {
             System.out.println("How many nodes would you like? (max "+ maxNodes +")");
             Scanner inputNodeNum = new Scanner(System.in);
             nodeNum = inputNodeNum.nextInt();
@@ -241,7 +230,7 @@ public class Reachability {
         for (int i = 0; i < nodeNum; i++ ){
             for (int j = 0; j < nodeNum; j++) {
                 boolean goodData = false;
-                while (goodData != true) {
+                while (!goodData) {
                     System.out.print("Please enter node data:\t");
                     Scanner inputNodeData = new Scanner(System.in);
                     int data = inputNodeData.nextInt();
